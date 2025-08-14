@@ -43,5 +43,4 @@ async def get_url(slug: str):
         result = session.exec(statement=statement).first()
         if not result:
             return {"error": "URL not found"}
-        # return RedirectResponse(url=result.original_url)
-        return result.original_url
+        return RedirectResponse(url=result.original_url)
