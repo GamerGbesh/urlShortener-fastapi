@@ -26,11 +26,10 @@ I wanted to recreate this functionality to understand how it works—while chall
 ## 📂 Project Structure
 project/
 │
-├── main.py # FastAPI app entry point
-├── models.py # SQLModel database models
-├── database.py # Database connection setup
-├── requirements.txt # Project dependencies
-└── README.md # Project documentation
+├── main.py
+├── models.py
+├── requirements.txt
+└── README.md
 
 **Clone the repository**
 ```bash
