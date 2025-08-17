@@ -25,10 +25,15 @@ I wanted to recreate this functionality to understand how it works—while chall
 
 ## 📂 Project Structure
 project/
+
 │
-├── main.py
+
+├── main.
+
 ├── models.py
+
 ├── requirements.txt
+
 └── README.md
 
 **Clone the repository**
@@ -57,7 +62,7 @@ uvicorn main:app --reload
 # Usage
 
 Shorten a URL:
-Send a POST request to `/shorten` with JSON body:
+Send a POST request to `/create` with JSON body:
 
 ```json
 {
@@ -68,7 +73,7 @@ Send a POST request to `/shorten` with JSON body:
 ### Example 
 
 ```bash
-POST http://127.0.0.1:8000/shorten
+POST http://127.0.0.1:8000/create
 {
     "original_url": "https://github.com/tiangolo/fastapi"
 }
