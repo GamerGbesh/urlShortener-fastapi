@@ -34,6 +34,8 @@ project/
 
 ├── requirements.txt
 
+├── test_main.py
+
 └── README.md
 
 **Clone the repository**
