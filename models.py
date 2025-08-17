@@ -1,5 +1,6 @@
 from sqlmodel import SQLModel, Field, Session, select
 from typing import Optional
+from sqlalchemy import Column, Integer
 import random, string
 
 def generate_random_url(characters = string.ascii_letters + string.digits, size = 8):
@@ -10,6 +11,7 @@ class Link(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     original_url: str
     url_slug: Optional[str] = Field(nullable=True, unique=True, default=None)
+    clicks: int = Field(sa_column=Column(Integer, nullable=False, server_default="0"), default=0)
 
     def save(self, session: Session):
         slug = generate_random_url()

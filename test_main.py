@@ -33,16 +33,22 @@ def test_create():
                 "original_url": "https://example.com"
             }
         )
+    
     assert response.status_code == 200
     data = response.json()
     assert data["original_url"] == "https://example.com"
     assert data["url_slug"] is not None
+    assert data["clicks"] == 0
 
     slug = data["url_slug"]
     redirect_response = client.get(f"/{slug}", follow_redirects=False)
     assert redirect_response.status_code == 307
     assert redirect_response.headers["location"] == "https://example.com"
 
+    info_response = client.get(f"/info/{slug}")
+    assert info_response.status_code == 200
+    info_data = info_response.json()
+    assert info_data["clicks"] == 1
 
 def test_not_found_redirect():
     response = client.get("/nonexistent", follow_redirects=False)

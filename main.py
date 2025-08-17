@@ -38,10 +38,24 @@ async def create(url: CreateUrl, session: Session = Depends(get_session)):
     link.save(session)
     return link
 
+@app.get("/info/{slug}")
+async def get_info(slug: str, session: Session = Depends(get_session)):
+    statement = select(Link).where(Link.url_slug == slug)
+    result = session.exec(statement=statement).first()
+    if not result:
+        return {"error": "URL not found"}
+    return result
+
 @app.get("/{slug}")
 async def get_url(slug: str, session: Session = Depends(get_session)):
     statement = select(Link).where(Link.url_slug == slug)
     result = session.exec(statement=statement).first()
     if not result:
         return {"error": "URL not found"}
+    # This was done to keep track of the number of times a specific shortened url was clicked
+    result.clicks += 1
+    session.add(result)
+    session.commit()
+    session.refresh(result)
     return RedirectResponse(url=result.original_url)
+
