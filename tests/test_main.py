@@ -1,8 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import SQLModel, create_engine, Session
-from urlShortener.main import app, get_session
-from urlShortener.models import Link
+from app.main import app, get_session
+from app.models import Link
 
 
 path = "./test.db"
