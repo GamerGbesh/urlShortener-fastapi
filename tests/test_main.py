@@ -1,8 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import SQLModel, create_engine, Session
-from .main import app, get_session
-from .models import Link
+from urlShortener.main import app, get_session
+from urlShortener.models import Link
 
 
 path = "./test.db"
@@ -34,7 +34,7 @@ def test_create():
             }
         )
     
-    assert response.status_code == 200
+    assert response.status_code == 201
     data = response.json()
     assert data["original_url"] == "https://example.com"
     assert data["url_slug"] is not None
@@ -52,5 +52,5 @@ def test_create():
 
 def test_not_found_redirect():
     response = client.get("/nonexistent", follow_redirects=False)
-    assert response.status_code == 200
-    assert response.json() == {"error": "URL not found"}
+    assert response.status_code == 404
+    assert response.json() == {"detail": "URL not found"}
