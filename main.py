@@ -1,6 +1,6 @@
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException, status
 from contextlib import asynccontextmanager
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 from sqlmodel import select
 from pydantic import BaseModel
 from sqlmodel import Session, create_engine, SQLModel
@@ -31,7 +31,7 @@ class CreateUrl(BaseModel):
     """Request body for creating a new url"""
     original_url: str
 
-@app.post("/create", response_model=Link)
+@app.post("/create", response_model=Link, status_code=status.HTTP_201_CREATED)
 async def create(url: CreateUrl, session: Session = Depends(get_session)):
     link: Link = Link(original_url=url.original_url)
     # Custom saving logic which is defined in the Link class
@@ -43,7 +43,7 @@ async def get_info(slug: str, session: Session = Depends(get_session)):
     statement = select(Link).where(Link.url_slug == slug)
     result = session.exec(statement=statement).first()
     if not result:
-        return {"error": "URL not found"}
+        raise HTTPException(status_code=404, detail="URL not found")
     return result
 
 @app.get("/{slug}")
@@ -51,7 +51,7 @@ async def get_url(slug: str, session: Session = Depends(get_session)):
     statement = select(Link).where(Link.url_slug == slug)
     result = session.exec(statement=statement).first()
     if not result:
-        return {"error": "URL not found"}
+        raise HTTPException(status_code=404, detail="URL not found")
     # This was done to keep track of the number of times a specific shortened url was clicked
     result.clicks += 1
     session.add(result)
